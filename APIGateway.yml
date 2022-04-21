@@ -1,0 +1,26 @@
+server:
+  port: 9000
+secretKey: 123
+spring:
+  application:
+    name: API Gateway
+  cloud:
+    gateway:
+      routes:
+        - id: AuthService
+          uri: lb://AuthService
+          predicates:
+            - Path= /auth/**
+        - id: TodoListService
+          uri: lb://TodoListService
+          predicates:
+            - Path= /todolist/admin/**
+          filters:
+            - name: AuthFilter
+            - name: RoleFilter
+        - id: TodoListService
+          uri: lb://TodoListService
+          predicates:
+            - Path= /todolist/**
+          filters:
+            - name: AuthFilter
